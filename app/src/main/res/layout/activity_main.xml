@@ -7,6 +7,7 @@
     tools:context=".MainActivity">
 
 
+
     <TextView
         android:id="@+id/myTextViewCountDown"
         android:layout_width="wrap_content"
@@ -39,11 +40,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="88dp"
         android:max="180"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:scrollbarSize="15dp"
         app:layout_constraintBottom_toTopOf="@+id/myTextViewCountDown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/myTextViewPercentage"
@@ -58,17 +63,59 @@
         app:layout_constraintTop_toBottomOf="@+id/mySeekBar"
         app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/textViewCheck"
+    <Button
+        android:id="@+id/myButtonRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello"
-        android:textSize="30sp"
+        android:onClick="register"
+        android:text="register"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.137"
+        app:layout_constraintHorizontal_bias="0.102"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.934" />
+        app:layout_constraintVertical_bias="0.941" />
+
+    <Button
+        android:id="@+id/myButtonLogOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:text="LOGOUT"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.941"
+        android:onClick="logOut"/>
+
+    <Button
+        android:id="@+id/myButtonLogIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="40dp"
+        android:text="LOGIN"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/myButtonLogOut"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/myButtonRegister"
+        app:layout_constraintTop_toTopOf="@+id/myButtonRegister"
+        app:layout_constraintVertical_bias="0.0"
+        android:onClick="logIn"/>
+
+    <!--    <Button-->
+<!--        android:id="@+id/myButtonRegister"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginBottom="40dp"-->
+<!--        android:text="LOGIN"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/myButtonLogOut"-->
+<!--        app:layout_constraintHorizontal_bias="0.468"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/myButtonRegister"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="1.0"-->
+<!--        android:onClick="logIn"/>-->
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

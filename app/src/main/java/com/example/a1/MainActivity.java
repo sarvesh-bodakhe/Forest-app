@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private long myStartTimeInMillis = 0;
     private long myTimeLeftInMillis;
     private long myEndTime;
+    private boolean isLoggedIn = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -50,7 +53,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
+
 
     public void verifyCancel(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -74,6 +79,36 @@ public class MainActivity extends AppCompatActivity {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if(myTimerRunning) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Your Tree will die if you quit");
+            builder.setMessage("Do you really want to quit ?");
+
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    cancelTimer();
+                    finish();
+                }
+            });
+
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }else{
+            super.onBackPressed();
+        }
 
     }
 
@@ -102,11 +137,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     public void setTime(int value){
        myStartTimeInMillis = value*60*1000;
        Log.d("tag", "setTime(), myStartTimeInMills = "+myStartTimeInMillis);
        resetTimer();
     }
+
 
     public void updatePercentage(int myProgress){
         TextView textView = findViewById(R.id.myTextViewPercentage);
@@ -143,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
         updateWatchInterface();
     }
 
+
     private void cancelTimer(){
         Log.d("tag", "Do you really want to cancel ?");
         seekBar.setVisibility(View.VISIBLE);
@@ -153,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
         updateWatchInterface();
         myCOuntDownTimwe.cancel();
     }
+
 
     private void resetTimer() {
         myTimeLeftInMillis = myStartTimeInMillis;
@@ -231,11 +270,13 @@ public class MainActivity extends AppCompatActivity {
         Log.d("tag", "onPause()");
     }
 
+
     @Override
     protected void onStop() {
         super.onStop();
         Log.d("tag", "onStop()");
     }
+
 
     @Override
     protected void onResume() {
@@ -243,11 +284,37 @@ public class MainActivity extends AppCompatActivity {
         Log.d("tag", "onResume()");
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Log.d("tag", "onDestroy()");
     }
+
+
+    public void register(View view){
+        Log.d("tag", "register()");
+        Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+        startActivity(intent);
+        isLoggedIn = true;
+    }
+
+    public void logIn(View view){
+        Log.d("tag", "in logIn()");
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
+        isLoggedIn = true;
+    }
+
+    public void logOut(View view){
+        Log.d("tag", "in logOut()");
+        FirebaseAuth.getInstance().signOut();
+        Log.d("tag", "SignedOut");
+        isLoggedIn = false;
+    }
 }
+
+
+//TODO Data Storing, menubar, ui design, whitelist, JobSheduler
 
 
