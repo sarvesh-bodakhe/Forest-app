@@ -1,7 +1,10 @@
 package com.example.a1;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -38,8 +41,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(myTimerRunning){
-                    cancelTimer();
-                    Log.d("tag", "Cancel Pressed");
+                    Log.d("tag", "Verify()");
+                    verifyCancel();
+//                    cancelTimer();
+                    Log.d("tag", "Out of Verify()");
                 }else{
                     startTimer();
                 }
@@ -47,6 +52,30 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void verifyCancel(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Your Tree will die if you quit.");
+        builder.setMessage("Are you sure to quit?");
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+               Log.d("tag", "Yes. Cancel Timer. Kill tree");
+               cancelTimer();
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            Log.d("tag", "Don't kill tree");
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
 
 
     public void seekBarFunc(){
@@ -91,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void startTimer(){
         Log.d("tag", "startTimer(), myTimeLeftInMillis = "+  myTimeLeftInMillis);
+        seekBar.setVisibility(View.INVISIBLE);
         myTimeLeftInMillis = myStartTimeInMillis;
         myEndTime = System.currentTimeMillis() + myTimeLeftInMillis;
         myCOuntDownTimwe = new CountDownTimer(myTimeLeftInMillis, 1000) {
@@ -115,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void cancelTimer(){
         Log.d("tag", "Do you really want to cancel ?");
+        seekBar.setVisibility(View.VISIBLE);
         myTimeLeftInMillis = 0;
         myStartTimeInMillis = 0;
         myTimerRunning = false;
