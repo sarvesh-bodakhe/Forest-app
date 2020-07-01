@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "768886184239",
+    "firebase_url": "https://forest-project-48f70.firebaseio.com",
+    "project_id": "forest-project-48f70",
+    "storage_bucket": "forest-project-48f70.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768886184239:android:6fb4fde65d3b0e5c07a9da",
+        "android_client_info": {
+          "package_name": "com.example.a1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "768886184239-ef0ql320de2gi2fbpcci83iinbrvi59n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.a1",
+            "certificate_hash": "1b1dd71dde68f259da65d144acf8680e841379ec"
+          }
+        },
+        {
+          "client_id": "768886184239-l7dtc9dnejlr1a0m0a3fblfci37eftac.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz6aPCTMKgsR8PMWe0uWFwmdpAb4DrGsE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "768886184239-l7dtc9dnejlr1a0m0a3fblfci37eftac.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

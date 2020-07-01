@@ -1,6 +1,7 @@
 package com.example.a1;
 
 public class ObjectInfo {
+//    private String date;
     private String from;       //
     //private int timerValue;         //In minutes
     private String to;
@@ -13,6 +14,8 @@ public class ObjectInfo {
         this.end = end;
         this.done = done;
     }
+
+
 
     public String getFrom() {
         return from;

@@ -2,12 +2,14 @@ package com.example.a1;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.DialogTitle;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.provider.CalendarContract;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -19,11 +21,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static final String TAG = "MainActivity";
     private TextView myTextViewCountDown;
     private Button myButtonStartCancel;
     static int seekBarValue;
@@ -34,6 +38,15 @@ public class MainActivity extends AppCompatActivity {
     private long myTimeLeftInMillis;
     private long myEndTime;
     private boolean isLoggedIn = false;
+
+    /*Object Variables*/
+    private String infoStartTime;
+    private String infoExpectedEndTIme;
+    private String infoActualEndTime;
+    private Boolean isTreeTrue = false;
+    ObjectInfo currentObject;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -159,7 +172,30 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void startTimer(){
+        Log.d(TAG, "startTimer: ");
+        int currhr = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        int currmin = Calendar.getInstance().get(Calendar.MINUTE);
         Log.d("tag", "startTimer(), myTimeLeftInMillis = "+  myTimeLeftInMillis);
+        Log.d(TAG, "startTimer: Hour "+ Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+        Log.d(TAG, "startTimer: Minute "+ Calendar.getInstance().get(Calendar.MINUTE));
+//        Log.d(TAG, "startTimer: endtime"+ myEndTime);
+        int hr = (int) (myStartTimeInMillis/1000/60/60);
+        int min = (int) (myStartTimeInMillis/1000/60);
+        int endhr, endmin;
+        currmin = currhr*60 + currmin;
+        int endtotalmin = currmin + (int) myStartTimeInMillis/1000/60 ;
+        endhr = endtotalmin/60;
+        endmin = endtotalmin%60;
+        Log.d(TAG, "startTimer: endhr endmi "+ endhr + " " +endmin);
+//        String startTime = (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) + " : " +
+//                (Calendar.getInstance().get(Calendar.MINUTE));
+//
+//        String endTime =
+//        currentObject = new ObjectInfo();
+//        currentObject.setFrom(startTime);
+
+        createObjectInfo();
+
         seekBar.setVisibility(View.INVISIBLE);
         myTimeLeftInMillis = myStartTimeInMillis;
         myEndTime = System.currentTimeMillis() + myTimeLeftInMillis;
@@ -168,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 myTimeLeftInMillis = millisUntilFinished;
                 updateCounterView();
-                Log.d("tag", "On tick" + myTimeLeftInMillis);
+//                Log.d("tag", "On tick" + myTimeLeftInMillis);
             }
 
             @Override
@@ -176,6 +212,13 @@ public class MainActivity extends AppCompatActivity {
                 myTimerRunning = false;
 //              Tree Completed
                 Log.d("tag", "Tree Planted");
+                String endTimeActual = String.valueOf(Calendar.getInstance().get(Calendar.HOUR_OF_DAY))+ ":"+
+                        String.valueOf(Calendar.getInstance().get(Calendar.MINUTE));
+                currentObject.setEnd(endTimeActual);
+                currentObject.setDone(true);
+                Log.d(TAG, "FinishedTimer: Object Description " + currentObject.getFrom()+currentObject.getTo()
+                        + currentObject.getEnd() + currentObject.getDone());
+                //uploadToDatabase();
                 updateWatchInterface();
             }
         }.start();
@@ -183,9 +226,44 @@ public class MainActivity extends AppCompatActivity {
         updateWatchInterface();
     }
 
+    private void createObjectInfo() {
+        Log.d(TAG, "createObjectInfo: ");
+        int currhr = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        int currmin = Calendar.getInstance().get(Calendar.MINUTE);
+        String startTime = String.valueOf(currhr) + ":" + String.valueOf(currmin);
+//        Log.d("tag", "startTimer(), myTimeLeftInMillis = "+  myTimeLeftInMillis);
+//        Log.d(TAG, "startTimer: Hour "+ Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+//        Log.d(TAG, "startTimer: Minute "+ Calendar.getInstance().get(Calendar.MINUTE));
+        Log.d(TAG, "createObjectInfo: startTime: " +startTime);
+//        Log.d(TAG, "startTimer: endtime"+ myEndTime);
+        int hr = (int) (myStartTimeInMillis/1000/60/60);
+        int min = (int) (myStartTimeInMillis/1000/60);
+        int endhr, endmin;
+        currmin = currhr*60 + currmin;
+        int endtotalmin = currmin + (int) myStartTimeInMillis/1000/60 ;
+        endhr = endtotalmin/60;
+        endmin = endtotalmin%60;
+//        Log.d(TAG, "startTimer: endhr endmi "+ endhr + " " +endmin);
+        String endTime = String.valueOf(endhr) + ":" + String.valueOf(endmin);
+        Log.d(TAG, "createObjectInfo: endTIme : " + endTime);
+
+        currentObject = new ObjectInfo();
+        currentObject.setFrom(startTime);
+        currentObject.setTo(endTime);
+        Log.d(TAG, "createObjectInfo: currentObject.getFrom() " + currentObject.getFrom());
+        Log.d(TAG, "createObjectInfo: currentObject.getTo() " + currentObject.getTo());
+    }
+
 
     private void cancelTimer(){
-        Log.d("tag", "Do you really want to cancel ?");
+        Log.d(TAG, "cancelTimer: ");
+        String endTimeActual = String.valueOf(Calendar.getInstance().get(Calendar.HOUR_OF_DAY))+ ":"+
+                String.valueOf(Calendar.getInstance().get(Calendar.MINUTE));
+        Log.d(TAG, "cancelTimer: endTimeActual : " + endTimeActual);
+        Log.d(TAG, "cancelTimer: currentObject.getTo() " + currentObject.getTo());
+        currentObject.setEnd(endTimeActual);
+        currentObject.setDone(false);
+        uploadToDatabase();
         seekBar.setVisibility(View.VISIBLE);
         myTimeLeftInMillis = 0;
         myStartTimeInMillis = 0;
@@ -193,10 +271,26 @@ public class MainActivity extends AppCompatActivity {
         updateCounterView();
         updateWatchInterface();
         myCOuntDownTimwe.cancel();
+        Log.d(TAG, "cancelTimer: Object Description " + currentObject.getFrom()+currentObject.getTo()
+                + currentObject.getEnd() + currentObject.getDone());
     }
 
 
+    public void uploadToDatabase(){
+        Log.d(TAG, "uploadToDatabase: ");
+        ObjectInfo objToUpload = currentObject;
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("from",currentObject.getFrom());
+        hashMap.put("to", currentObject.getTo());
+        hashMap.put("end", currentObject.getEnd());
+        hashMap.put("done", currentObject.getDone());
+        DatabaseReference myref = FirebaseDatabase.getInstance().getReference().child("profiles");
+        myref.setValue(hashMap);
+//        myref.push();
+    }
+
     private void resetTimer() {
+        Log.d(TAG, "resetTimer: ");
         myTimeLeftInMillis = myStartTimeInMillis;
         updateCounterView();
         updateWatchInterface();
