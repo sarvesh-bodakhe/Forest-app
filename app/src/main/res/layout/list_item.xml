@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/relativeLayoutForList"
+    android:background="@drawable/border">
+
+    <ImageView
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:id="@+id/myImageForViewHolder"
+        android:src="@mipmap/ic_launcher"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Information About Tree"
+        android:id="@+id/myTextViewInfo"
+        android:layout_toRightOf="@id/myImageForViewHolder"
+        android:textColor="#000"
+        android:textSize="15sp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="5dp"
+        />
+<!--        android:layout_centerVertical="true"-->
+        <TextView
+            android:id="@+id/myTextViewFromTo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/myImageForViewHolder"
+            android:layout_marginTop="35dp"
+            android:layout_marginLeft="30dp"
+            android:textSize="15sp"
+            android:text="From - To"
+            android:textColor="#000"
+            />
+
+        <TextView
+            android:id="@+id/myTextViewIsComplete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Complete?"
+            android:textColor="@color/red"
+            android:layout_marginTop="63dp"
+            android:layout_toRightOf="@id/myImageForViewHolder"
+            android:layout_marginLeft="30dp"
+            android:textSize="15sp"
+            />
+</RelativeLayout>

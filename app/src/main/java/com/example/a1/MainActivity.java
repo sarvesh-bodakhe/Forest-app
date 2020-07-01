@@ -16,7 +16,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -165,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 myTimeLeftInMillis = millisUntilFinished;
                 updateCounterView();
-                Log.d("tag", "On tick");
+                Log.d("tag", "On tick" + myTimeLeftInMillis);
             }
 
             @Override
@@ -311,6 +314,28 @@ public class MainActivity extends AppCompatActivity {
         FirebaseAuth.getInstance().signOut();
         Log.d("tag", "SignedOut");
         isLoggedIn = false;
+    }
+
+    public void fun(View view) {
+        Log.d("tag", "in fun()");
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myref = database.getReference("Root2").push().child("Root3");
+//        myref.setValue("2");
+
+        HashMap<String, Object> myMap = new HashMap<>();
+        myMap.put("Name", "c");
+        myMap.put("StartTime", "12:00");
+        myMap.put("ExpectedEndTime", "14:00");
+        myMap.put("DidComplete", true);
+        myMap.put("EndTime", "14:00");
+
+        myref.updateChildren(myMap);
+    }
+
+    public void goForList(View view) {
+        Log.d("tag", "Go for list");
+        startActivity(new Intent(MainActivity.this, ListActivity.class));
+        Log.d("tag", "Back from list Activity");
     }
 }
 

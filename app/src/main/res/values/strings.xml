@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Forest</string>
+    <string name="profile">Profile</string>
+    <string name="post">Post</string>
 </resources>

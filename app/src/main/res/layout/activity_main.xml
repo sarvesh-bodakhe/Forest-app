@@ -103,6 +103,30 @@
         app:layout_constraintVertical_bias="0.0"
         android:onClick="logIn"/>
 
+    <Button
+        android:id="@+id/myButtonForFun"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fun"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.036"
+        android:onClick="fun"/>
+
+    <Button
+        android:id="@+id/myButtonForList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text="List"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.332"
+        android:onClick="goForList"/>
+
     <!--    <Button-->
 <!--        android:id="@+id/myButtonRegister"-->
 <!--        android:layout_width="wrap_content"-->
