@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,6 +22,7 @@ public class ListActivity extends AppCompatActivity {
     private static final String TAG = "ListActivity";
 
     DatabaseReference myRef;
+    FirebaseAuth myAuth;
     RecyclerView myRecyclerView;
     ArrayList<ObjectInfo> myListOfObjects;
     RecycleViewAdapter myAdapter;
@@ -35,16 +37,18 @@ public class ListActivity extends AppCompatActivity {
         myRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         myListOfObjects = new ArrayList<>();
 
-
-
-        myRef = FirebaseDatabase.getInstance().getReference().child("profiles");
+        String userId = FirebaseAuth.getInstance().getUid();
+        if(userId == null)
+            userId = "NoUserId";
+        myRef = FirebaseDatabase.getInstance().getReference().child("profiles/").child(userId);
         myRef.addValueEventListener(new ValueEventListener() {
+
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d(TAG, "onDataChange: ");
                 for(DataSnapshot myDataSnapshot : dataSnapshot.getChildren()){
                     ObjectInfo currObject = myDataSnapshot.getValue(ObjectInfo.class);
-                    Log.d(TAG, "onDataChange: Adding User");
+//                    Log.d(TAG, "onDataChange: Adding User");
                     myListOfObjects.add(currObject);
                 }
                 Log.d(TAG, "onDataChange: Size Of myListOfObjects" + myListOfObjects.size());

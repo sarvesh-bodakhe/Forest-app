@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private long myStartTimeInMillis = 0;
     private long myTimeLeftInMillis;
     private long myEndTime;
-    private boolean isLoggedIn ;
+    private boolean isLoggedIn = false;
 
     /*Object Variables*/
     private String infoStartTime;
@@ -49,14 +49,15 @@ public class MainActivity extends AppCompatActivity {
     private Boolean isTreeTrue = false;
     ObjectInfo currentObject;
 
-
+    private String myUserId ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        myUserId = FirebaseAuth.getInstance().getUid();
+        Log.d(TAG, "onCreate: myUserId = " + myUserId);
         myButtonStartCancel = findViewById(R.id.myButtonStartCancel);
         myTextViewCountDown = findViewById(R.id.myTextViewCountDown);
         seekBarFunc();
@@ -178,20 +179,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void startTimer(){
         Log.d(TAG, "startTimer: ");
-        int currhr = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-        int currmin = Calendar.getInstance().get(Calendar.MINUTE);
-        Log.d("tag", "startTimer(), myTimeLeftInMillis = "+  myTimeLeftInMillis);
-        Log.d(TAG, "startTimer: Hour "+ Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
-        Log.d(TAG, "startTimer: Minute "+ Calendar.getInstance().get(Calendar.MINUTE));
+
+//        int currhr = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+//        int currmin = Calendar.getInstance().get(Calendar.MINUTE);
+//        Log.d("tag", "startTimer(), myTimeLeftInMillis = "+  myTimeLeftInMillis);
+//        Log.d(TAG, "startTimer: Hour "+ Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+//        Log.d(TAG, "startTimer: Minute "+ Calendar.getInstance().get(Calendar.MINUTE));
 //        Log.d(TAG, "startTimer: endtime"+ myEndTime);
-        int hr = (int) (myStartTimeInMillis/1000/60/60);
-        int min = (int) (myStartTimeInMillis/1000/60);
-        int endhr, endmin;
-        currmin = currhr*60 + currmin;
-        int endtotalmin = currmin + (int) myStartTimeInMillis/1000/60 ;
-        endhr = endtotalmin/60;
-        endmin = endtotalmin%60;
-        Log.d(TAG, "startTimer: endhr endmi "+ endhr + " " +endmin);
+//        int hr = (int) (myStartTimeInMillis/1000/60/60);
+//        int min = (int) (myStartTimeInMillis/1000/60);
+//        int endhr, endmin;
+//        currmin = currhr*60 + currmin;
+//        int endtotalmin = currmin + (int) myStartTimeInMillis/1000/60 ;
+//        endhr = endtotalmin/60;
+//        endmin = endtotalmin%60;
+//        Log.d(TAG, "startTimer: endhr endmi "+ endhr + " " +endmin);
 //        String startTime = (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) + " : " +
 //                (Calendar.getInstance().get(Calendar.MINUTE));
 //
@@ -233,6 +235,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void createObjectInfo() {
         Log.d(TAG, "createObjectInfo: ");
+       // Calendar currCaledar = Calendar.getInstance();
         int currhr = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         int currmin = Calendar.getInstance().get(Calendar.MINUTE);
         String startTime = String.valueOf(currhr) + ":" + String.valueOf(currmin);
@@ -250,11 +253,12 @@ public class MainActivity extends AppCompatActivity {
         endmin = endtotalmin%60;
 //        Log.d(TAG, "startTimer: endhr endmi "+ endhr + " " +endmin);
         String endTime = String.valueOf(endhr) + ":" + String.valueOf(endmin);
-        Log.d(TAG, "createObjectInfo: endTIme : " + endTime);
+//        Log.d(TAG, "createObjectInfo: endTIme : " + endTime);
 
         currentObject = new ObjectInfo();
         currentObject.setFrom(startTime);
         currentObject.setTo(endTime);
+
         Log.d(TAG, "createObjectInfo: currentObject.getFrom() " + currentObject.getFrom());
         Log.d(TAG, "createObjectInfo: currentObject.getTo() " + currentObject.getTo());
     }
@@ -282,18 +286,26 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void uploadToDatabase(){
-        Log.d(TAG, "uploadToDatabase: User is logged in, isLoggedIn + " + isLoggedIn);
-        String userId = FirebaseAuth.getInstance().getUid();
-        Log.d(TAG, "uploadToDatabase: ");
+        Log.d(TAG, "uploadToDatabase: MyUserId : " + myUserId);
         ObjectInfo objToUpload = currentObject;
+
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("from",currentObject.getFrom());
         hashMap.put("to", currentObject.getTo());
         hashMap.put("end", currentObject.getEnd());
         hashMap.put("done", currentObject.getDone());
-        DatabaseReference myref = FirebaseDatabase.getInstance().getReference().child("profiles/").child(userId); //add user
-        myref.push().setValue(hashMap);
+//        hashMap.put("calender", currentObject.getCalendar());
 
+        if(myUserId == null){
+            DatabaseReference myref = FirebaseDatabase.getInstance().getReference().child("profiles").child("NoUserId"); //add user
+            myref.push().setValue(hashMap);
+            Log.d(TAG, "uploadToDatabase setValue with MyuserId = null " + myref);
+        }
+        else {
+            DatabaseReference myref = FirebaseDatabase.getInstance().getReference().child("profiles/").child(myUserId); //add user
+            myref.push().setValue(hashMap);
+            Log.d(TAG, "uploadToDatabase: setvalue with MyuserId = true" + myref);
+        }
 
     }
 
@@ -329,44 +341,44 @@ public class MainActivity extends AppCompatActivity {
             myButtonStartCancel.setText("start");
         }
     }
+
+
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        SharedPreferences sharedPreferences = getSharedPreferences("sharedPreferences", MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.putLong("startTimeMillis", myStartTimeInMillis);
+//        editor.putLong("millisLeft", myTimeLeftInMillis);
+//        editor.putBoolean("timerRunning", myTimerRunning);
+//        editor.putLong("endTime", myEndTime);
+//        editor.apply();
+//        if(myCOuntDownTimwe != null){
+//            myCOuntDownTimwe.cancel();
+//        }
+//    }
 //
-//
-////    @Override
-////    protected void onStop() {
-////        super.onStop();
-////        SharedPreferences sharedPreferences = getSharedPreferences("sharedPreferences", MODE_PRIVATE);
-////        SharedPreferences.Editor editor = sharedPreferences.edit();
-////        editor.putLong("startTimeMillis", myStartTimeInMillis);
-////        editor.putLong("millisLeft", myTimeLeftInMillis);
-////        editor.putBoolean("timerRunning", myTimerRunning);
-////        editor.putLong("endTime", myEndTime);
-////        editor.apply();
-////        if(myCOuntDownTimwe != null){
-////            myCOuntDownTimwe.cancel();
-////        }
-////    }
-////
-////    @Override
-////    protected void onStart() {
-////        super.onStart();
-////        SharedPreferences sharedPreferences = getSharedPreferences("sharedPreferences", MODE_PRIVATE);
-////        myStartTimeInMillis = sharedPreferences.getLong("startTimeMillis", 1800000);
-////        myTimeLeftInMillis = sharedPreferences.getLong("millisLeft", myStartTimeInMillis);
-////        myTimerRunning = sharedPreferences.getBoolean("timerRunning", false);
-////        updateCounterView();
-////        if(myTimerRunning){
-////            myEndTime = sharedPreferences.getLong("endTime", 0);
-////            myTimeLeftInMillis = myEndTime - System.currentTimeMillis();
-////            if(myTimeLeftInMillis < 0){
-////                myTimeLeftInMillis = 0;
-////                myTimerRunning = false;
-////                updateCounterView();
-////                updateWatchInterface();
-////            }else{
-////                startTimer();
-////            }
-////        }
-////    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        SharedPreferences sharedPreferences = getSharedPreferences("sharedPreferences", MODE_PRIVATE);
+//        myStartTimeInMillis = sharedPreferences.getLong("startTimeMillis", 1800000);
+//        myTimeLeftInMillis = sharedPreferences.getLong("millisLeft", myStartTimeInMillis);
+//        myTimerRunning = sharedPreferences.getBoolean("timerRunning", false);
+//        updateCounterView();
+//        if(myTimerRunning){
+//            myEndTime = sharedPreferences.getLong("endTime", 0);
+//            myTimeLeftInMillis = myEndTime - System.currentTimeMillis();
+//            if(myTimeLeftInMillis < 0){
+//                myTimeLeftInMillis = 0;
+//                myTimerRunning = false;
+//                updateCounterView();
+//                updateWatchInterface();
+//            }else{
+//                startTimer();
+//            }
+//        }
+//    }
 
 
     @Override
@@ -405,14 +417,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void logIn(View view){
-
-        if(isLoggedIn == false) {
+        Log.d(TAG, "logIn: userId : " + myUserId);
+        if(myUserId == null) {
             isLoggedIn = true;
-            Log.d("tag", "in logIn(), isLoggedIn " + isLoggedIn);
+            Log.d("tag", "in logIn(), isLoggedIn useid null" );
 
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             Log.d(TAG, "logIn: Out of Log in");
             startActivity(intent);
+            Log.d(TAG, "logIn: ");
+            myUserId = FirebaseAuth.getInstance().getUid();
+            Log.d(TAG, "logIn: User Id after log in = " + myUserId);
         }else{
             Toast.makeText(this, "User Already Logged In", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "logIn: User Alreadt Logged in");
@@ -420,12 +435,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void logOut(View view){
-        if(isLoggedIn) {
+        if(myUserId != null) {
             isLoggedIn = false;
-            Log.d("tag", "in logOut() isLoggedIn" + isLoggedIn);
+            Log.d(TAG, "logOut: myUserId = " + myUserId);
             FirebaseAuth.getInstance().signOut();
             Log.d("tag", "SignedOut");
-
+            myUserId = null;
+            Log.d(TAG, "logOut: After Sign out myUserId = " + myUserId);
         }else{
             Toast.makeText(this, "User Not Logged In", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "logOut: User need to Log in");
@@ -460,8 +476,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, AppListActivity.class));
     }
 }
-
-
-
-//TODO  menubar, ui design, whitelist
-
+//
+//
+//
+////TODO  menubar, ui design, whitelist

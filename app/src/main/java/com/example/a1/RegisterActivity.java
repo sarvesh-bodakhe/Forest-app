@@ -2,6 +2,7 @@ package com.example.a1;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.DialogTitle;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,15 +17,19 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterActivity extends AppCompatActivity {
-
+    private static final String TAG = "RegisterActivity";
     private EditText email;
     private EditText password;
     private Button register;
     private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
@@ -50,21 +55,24 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerUser(String txtEmail, String txtPasswor) {
-        Log.d("tag", "in registerUser()" + txtEmail + txtPasswor);
+        Log.d(TAG, "registerUser: ");
         mAuth.createUserWithEmailAndPassword(txtEmail, txtPasswor)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()) {
-                            Log.d("tag", "User Created");
+                            Log.d(TAG, "onComplete: Registering User");
+//                            myDataBase.getReference().child("profiles").push().setValue(mAuth.getUid());
+                            DatabaseReference myref = FirebaseDatabase.getInstance().getReference().child("profiles");
+                            myref.push().setValue(mAuth.getUid());
                             startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                             finish();
                         }else{
-                            Log.d("tag", "User Failed");
+                            Log.d(TAG, "onComplete: Registration Falied");
                         }
                     }
                 });
-        Log.d("tag", "Done");
+
     }
 
 }
