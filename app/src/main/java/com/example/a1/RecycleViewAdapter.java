@@ -13,7 +13,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 //import com.google.firebase.database.core.Context;
 import android.content.Context;
+
+import java.text.SimpleDateFormat;
+import java.time.Month;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.ViewHolder>{
     private static final String TAG = "RecycleViewAdapter";
@@ -43,6 +48,10 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         ObjectInfo currentObject = myObjects.get(position);
         String fromTo = currentObject.getFrom() + " - " + currentObject.getTo();
         String endTime = currentObject.getEnd();
+        Date date = currentObject.getDate();
+        String dateString = "";
+        SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyyy");
+
         String infoAboutTree;
         if(currentObject.getDone()){
             infoAboutTree = "Successfully planted a tree";
@@ -52,6 +61,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         holder.textViewFromTo.setText(fromTo);
         holder.textViewIsComplete.setText(currentObject.getDone().toString());
         holder.textViewInfo.setText(infoAboutTree);
+        holder.textViewForDate.setText(ft.format(date));
     }
 
     @Override
@@ -62,7 +72,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         ImageView imageView;
-        TextView textViewInfo, textViewFromTo, textViewIsComplete;
+        TextView textViewInfo, textViewFromTo, textViewIsComplete, textViewForDate;
         RelativeLayout relativeLayout;
 
         public ViewHolder(@NonNull View itemView) {
@@ -72,8 +82,8 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
             textViewInfo = itemView.findViewById(R.id.myTextViewInfo);
             textViewFromTo = itemView.findViewById(R.id.myTextViewFromTo);
             textViewIsComplete = itemView.findViewById(R.id.myTextViewIsComplete);
+            textViewForDate = itemView.findViewById(R.id.myTextViewForDate);
             relativeLayout = itemView.findViewById(R.id.relativeLayoutForList);
-
         }
     }
 }

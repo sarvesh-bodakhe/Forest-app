@@ -26,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.time.LocalDateTime;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -255,9 +256,12 @@ public class MainActivity extends AppCompatActivity {
         String endTime = String.valueOf(endhr) + ":" + String.valueOf(endmin);
 //        Log.d(TAG, "createObjectInfo: endTIme : " + endTime);
 
+        Date date = new Date();
+
         currentObject = new ObjectInfo();
         currentObject.setFrom(startTime);
         currentObject.setTo(endTime);
+        currentObject.setDate(date);
 
         Log.d(TAG, "createObjectInfo: currentObject.getFrom() " + currentObject.getFrom());
         Log.d(TAG, "createObjectInfo: currentObject.getTo() " + currentObject.getTo());
@@ -294,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
         hashMap.put("to", currentObject.getTo());
         hashMap.put("end", currentObject.getEnd());
         hashMap.put("done", currentObject.getDone());
-//        hashMap.put("calender", currentObject.getCalendar());
+        hashMap.put("date", currentObject.getDate());
 
         if(myUserId == null){
             DatabaseReference myref = FirebaseDatabase.getInstance().getReference().child("profiles").child("NoUserId"); //add user
@@ -384,28 +388,29 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d("tag", "onPause()");
+        Log.d(TAG, "MainActivity onPause: ");
     }
 
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d("tag", "onStop()");
+        Log.d(TAG, "MainActivity onStop: ");
     }
+
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("tag", "onResume()");
+        Log.d(TAG, "MainActivity onResume: ");
     }
 
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d("tag", "onDestroy()");
+        Log.d(TAG, "MainActivity onDestroy: ");
     }
 
 

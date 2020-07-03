@@ -1,21 +1,33 @@
 package com.example.a1;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class ObjectInfo {
 //    private String date;
     private String from;       //
-    //private int timerValue;         //In minutes
     private String to;
     private String end;
     private Boolean done;
+    private Date date;
 
-    public ObjectInfo(String from, String to, String end, Boolean done) {
+
+    public ObjectInfo(String from, String to, String end, Boolean done, Date date) {
         this.from = from;
         this.to = to;
         this.end = end;
         this.done = done;
+        this.date = date;
     }
 
 
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
     public String getFrom() {
         return from;
