@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.DialogTitle;
 
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +17,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -37,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private long myStartTimeInMillis = 0;
     private long myTimeLeftInMillis;
     private long myEndTime;
-    private boolean isLoggedIn = false;
+    private boolean isLoggedIn ;
 
     /*Object Variables*/
     private String infoStartTime;
@@ -47,11 +50,13 @@ public class MainActivity extends AppCompatActivity {
     ObjectInfo currentObject;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         myButtonStartCancel = findViewById(R.id.myButtonStartCancel);
         myTextViewCountDown = findViewById(R.id.myTextViewCountDown);
         seekBarFunc();
@@ -218,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
                 currentObject.setDone(true);
                 Log.d(TAG, "FinishedTimer: Object Description " + currentObject.getFrom()+currentObject.getTo()
                         + currentObject.getEnd() + currentObject.getDone());
-                //uploadToDatabase();
+                uploadToDatabase();
                 updateWatchInterface();
             }
         }.start();
@@ -277,6 +282,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void uploadToDatabase(){
+        Log.d(TAG, "uploadToDatabase: User is logged in, isLoggedIn + " + isLoggedIn);
+        String userId = FirebaseAuth.getInstance().getUid();
         Log.d(TAG, "uploadToDatabase: ");
         ObjectInfo objToUpload = currentObject;
         HashMap<String, Object> hashMap = new HashMap<>();
@@ -284,9 +291,10 @@ public class MainActivity extends AppCompatActivity {
         hashMap.put("to", currentObject.getTo());
         hashMap.put("end", currentObject.getEnd());
         hashMap.put("done", currentObject.getDone());
-        DatabaseReference myref = FirebaseDatabase.getInstance().getReference().child("profiles");
-        myref.setValue(hashMap);
-//        myref.push();
+        DatabaseReference myref = FirebaseDatabase.getInstance().getReference().child("profiles/").child(userId); //add user
+        myref.push().setValue(hashMap);
+
+
     }
 
     private void resetTimer() {
@@ -321,44 +329,44 @@ public class MainActivity extends AppCompatActivity {
             myButtonStartCancel.setText("start");
         }
     }
-
-
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        SharedPreferences sharedPreferences = getSharedPreferences("sharedPreferences", MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putLong("startTimeMillis", myStartTimeInMillis);
-//        editor.putLong("millisLeft", myTimeLeftInMillis);
-//        editor.putBoolean("timerRunning", myTimerRunning);
-//        editor.putLong("endTime", myEndTime);
-//        editor.apply();
-//        if(myCOuntDownTimwe != null){
-//            myCOuntDownTimwe.cancel();
-//        }
-//    }
 //
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        SharedPreferences sharedPreferences = getSharedPreferences("sharedPreferences", MODE_PRIVATE);
-//        myStartTimeInMillis = sharedPreferences.getLong("startTimeMillis", 1800000);
-//        myTimeLeftInMillis = sharedPreferences.getLong("millisLeft", myStartTimeInMillis);
-//        myTimerRunning = sharedPreferences.getBoolean("timerRunning", false);
-//        updateCounterView();
-//        if(myTimerRunning){
-//            myEndTime = sharedPreferences.getLong("endTime", 0);
-//            myTimeLeftInMillis = myEndTime - System.currentTimeMillis();
-//            if(myTimeLeftInMillis < 0){
-//                myTimeLeftInMillis = 0;
-//                myTimerRunning = false;
-//                updateCounterView();
-//                updateWatchInterface();
-//            }else{
-//                startTimer();
-//            }
-//        }
-//    }
+//
+////    @Override
+////    protected void onStop() {
+////        super.onStop();
+////        SharedPreferences sharedPreferences = getSharedPreferences("sharedPreferences", MODE_PRIVATE);
+////        SharedPreferences.Editor editor = sharedPreferences.edit();
+////        editor.putLong("startTimeMillis", myStartTimeInMillis);
+////        editor.putLong("millisLeft", myTimeLeftInMillis);
+////        editor.putBoolean("timerRunning", myTimerRunning);
+////        editor.putLong("endTime", myEndTime);
+////        editor.apply();
+////        if(myCOuntDownTimwe != null){
+////            myCOuntDownTimwe.cancel();
+////        }
+////    }
+////
+////    @Override
+////    protected void onStart() {
+////        super.onStart();
+////        SharedPreferences sharedPreferences = getSharedPreferences("sharedPreferences", MODE_PRIVATE);
+////        myStartTimeInMillis = sharedPreferences.getLong("startTimeMillis", 1800000);
+////        myTimeLeftInMillis = sharedPreferences.getLong("millisLeft", myStartTimeInMillis);
+////        myTimerRunning = sharedPreferences.getBoolean("timerRunning", false);
+////        updateCounterView();
+////        if(myTimerRunning){
+////            myEndTime = sharedPreferences.getLong("endTime", 0);
+////            myTimeLeftInMillis = myEndTime - System.currentTimeMillis();
+////            if(myTimeLeftInMillis < 0){
+////                myTimeLeftInMillis = 0;
+////                myTimerRunning = false;
+////                updateCounterView();
+////                updateWatchInterface();
+////            }else{
+////                startTimer();
+////            }
+////        }
+////    }
 
 
     @Override
@@ -393,21 +401,36 @@ public class MainActivity extends AppCompatActivity {
         Log.d("tag", "register()");
         Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
         startActivity(intent);
-        isLoggedIn = true;
+//        isLoggedIn = true;
     }
 
     public void logIn(View view){
-        Log.d("tag", "in logIn()");
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-        startActivity(intent);
-        isLoggedIn = true;
+
+        if(isLoggedIn == false) {
+            isLoggedIn = true;
+            Log.d("tag", "in logIn(), isLoggedIn " + isLoggedIn);
+
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            Log.d(TAG, "logIn: Out of Log in");
+            startActivity(intent);
+        }else{
+            Toast.makeText(this, "User Already Logged In", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "logIn: User Alreadt Logged in");
+        }
     }
 
     public void logOut(View view){
-        Log.d("tag", "in logOut()");
-        FirebaseAuth.getInstance().signOut();
-        Log.d("tag", "SignedOut");
-        isLoggedIn = false;
+        if(isLoggedIn) {
+            isLoggedIn = false;
+            Log.d("tag", "in logOut() isLoggedIn" + isLoggedIn);
+            FirebaseAuth.getInstance().signOut();
+            Log.d("tag", "SignedOut");
+
+        }else{
+            Toast.makeText(this, "User Not Logged In", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "logOut: User need to Log in");
+            isLoggedIn = false;
+        }
     }
 
     public void fun(View view) {
@@ -431,9 +454,14 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, ListActivity.class));
         Log.d("tag", "Back from list Activity");
     }
+
+    public void showAppList(View view) {
+        Log.d(TAG, "showAppList: showAppList() Started");
+        startActivity(new Intent(MainActivity.this, AppListActivity.class));
+    }
 }
 
 
-//TODO Data Storing, menubar, ui design, whitelist, JobSheduler
 
+//TODO  menubar, ui design, whitelist
 
