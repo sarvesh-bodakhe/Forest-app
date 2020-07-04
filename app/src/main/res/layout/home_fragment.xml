@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+
+
+    <TextView
+        android:id="@+id/myTextViewCountDown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="00:00"
+        android:textSize="60sp"
+        />
+
+    <Button
+        android:id="@+id/myButtonStartCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/myTextViewCountDown"
+        android:layout_centerHorizontal="true"
+        android:scrollHorizontally="false"
+        android:text="start" />
+
+    <SeekBar
+        android:id="@+id/mySeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="88dp"
+        android:layout_marginHorizontal="15dp"
+        android:max="180"
+        android:scrollbarSize="15dp" />
+
+    <TextView
+        android:id="@+id/myTextViewPercentage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/mySeekBar"
+        android:layout_centerHorizontal="true"
+        android:text="00 / 00"
+        android:textSize="25sp"
+        />
+
+    <Button
+        android:id="@+id/myButtonRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="register"
+        android:text="register"
+        android:layout_below="@id/myButtonStartCancel"/>
+
+    <Button
+        android:id="@+id/myButtonLogOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:text="LOGOUT"
+        android:layout_below="@id/myButtonRegister"
+        android:onClick="logOut"/>
+
+    <Button
+        android:id="@+id/myButtonLogIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LOGIN"
+        android:layout_below="@id/myButtonLogOut"
+        android:onClick="logIn"/>
+
+    <Button
+        android:id="@+id/myButtonForFun"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fun"
+        android:layout_below="@id/myButtonLogIn"
+        android:onClick="fun"/>
+
+    <Button
+        android:id="@+id/myButtonForList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="List"
+        android:layout_below="@id/myButtonForFun"
+        android:onClick="goForList"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="APPLIST"
+        android:layout_below="@id/myButtonStartCancel"
+        android:onClick="showAppList"/>
+
+    <Button
+        android:id="@+id/myButtonShowGraph"
+        android:text="CHART"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/myButtonForList"
+        android:onClick="ShowPieChart"/>
+
+    <!--    <Button-->
+    <!--        android:id="@+id/myButtonRegister"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginBottom="40dp"-->
+    <!--        android:text="LOGIN"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toStartOf="@+id/myButtonLogOut"-->
+    <!--        app:layout_constraintHorizontal_bias="0.468"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/myButtonRegister"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        app:layout_constraintVertical_bias="1.0"-->
+    <!--        android:onClick="logIn"/>-->
+
+
+</RelativeLayout>

@@ -1,27 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     tools:context=".LoginActivity">
 
+    <ImageView
+        android:id="@+id/loginPro"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_profile_log_inn"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="35sp"
+        android:layout_centerHorizontal="true"
+        android:text="Log In"
+        android:textStyle="bold"
+        android:textColor="#000"
+        android:id="@+id/textLogin"
+        android:layout_below="@id/loginPro"/>
     <EditText
         android:id="@+id/myEditTextEmailLogIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:ems="10"
+        android:textColor="@color/dark_green"
+        android:paddingHorizontal="15dp"
         android:hint="Email"
-        android:inputType="textPersonName"
+        android:inputType="textEmailAddress"
         android:singleLine="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.049"
-        app:layout_goneMarginLeft="20dp"
-        app:layout_goneMarginRight="20dp" />
+        android:layout_below="@id/textLogin"/>
 
     <EditText
         android:id="@+id/myEditTextPasswordLogIn"
@@ -30,23 +44,50 @@
         android:layout_margin="20dp"
         android:layout_marginTop="364dp"
         android:ems="10"
-        android:hint="password"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/myEditTextEmailLogIn"
-        app:layout_constraintVertical_bias="0.0" />
+        android:paddingHorizontal="15dp"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:textColor="@color/dark_green"
+        android:layout_below="@id/myEditTextEmailLogIn"/>
 
     <Button
         android:id="@+id/myButtonLogInLogIn"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
         android:text="LOGIN"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.061"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/myEditTextPasswordLogIn"
-        app:layout_constraintVertical_bias="0.065" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_centerHorizontal="true"
+        android:textColor="#fff"
+        android:layout_below="@id/myEditTextPasswordLogIn"
+        android:background="@color/our_green"/>
+
+    <LinearLayout
+        android:layout_below="@id/myButtonLogInLogIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textRegister"
+            android:layout_marginTop="15dp"
+            android:text="Don't have account?"/>
+
+        <TextView
+            android:id="@+id/myTextViewRegisterAccount"
+            android:layout_marginTop="15dp"
+            android:paddingLeft="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create a new account"
+            android:textStyle="bold"
+            android:layout_alignRight="@id/textRegister"
+            android:textColor="@color/our_green"/>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

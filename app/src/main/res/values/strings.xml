@@ -2,4 +2,6 @@
     <string name="app_name">Forest</string>
     <string name="profile">Profile</string>
     <string name="post">Post</string>
+    <string name="navigation_drawer_open">Open Navigation Drawer</string>
+    <string name="navigation_drawer_close">Close Navigation Drawer</string>
 </resources>

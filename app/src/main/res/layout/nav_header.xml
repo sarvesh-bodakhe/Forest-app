@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="176dp"
-    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="176dp"
     android:background="@color/colorAccent"
     android:gravity="start"
     android:padding="16dp"
@@ -11,19 +11,20 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher_round"/>
+        android:src="@drawable/ic_profile_log_inn"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:text="Forest App"
+        android:text="Username"
         android:textColor="@color/black"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         />
 
     <TextView
         android:layout_width="wrap_content"
+        android:textColor="@color/gray"
         android:layout_height="wrap_content"
         android:text="Igneel@2031"/>
 </LinearLayout>

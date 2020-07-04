@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -23,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText password;
     private Button myButton;
     private FirebaseAuth myAuth;
+    private TextView register;
 
 
     @Override
@@ -33,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.myEditTextEmailLogIn);
         password = findViewById(R.id.myEditTextPasswordLogIn);
         myButton = findViewById(R.id.myButtonLogInLogIn);
+        register = findViewById(R.id.myTextViewRegisterAccount);
         myAuth = FirebaseAuth.getInstance();
 
         myButton.setOnClickListener(new View.OnClickListener() {
@@ -52,6 +55,19 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this,RegisterActivity.class));
+            }
+        });
+
+
+
+
+
+
 
     }
 
