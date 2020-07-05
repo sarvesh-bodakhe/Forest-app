@@ -38,4 +38,4 @@ SDS Task
 
 
 
-![homescreen1] (https://github.com/sarvesh-bodakhe/Forest-app/blob/master/Forest-Screenshots/homescreen2.png)
+![homescreen1] (https://github.com/sarvesh-bodakhe/Forest-app/blob/master/Forest-Screenshots/homescreen2.png?raw=true)
