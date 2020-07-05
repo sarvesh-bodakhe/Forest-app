@@ -9,22 +9,28 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:src="@drawable/ic_profile_log_inn"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="8dp"
-        android:text="Username"
-        android:textColor="@color/black"
+        android:paddingTop="10dp"
+        android:textSize="20sp"
+        android:textColorHighlight="@color/brown"
+        android:text="Forest App"
+        android:textColor="@color/brown"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         />
 
     <TextView
+        android:id="@+id/userMailId"
         android:layout_width="wrap_content"
-        android:textColor="@color/gray"
         android:layout_height="wrap_content"
-        android:text="Igneel@2031"/>
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        android:text="User Mail ID"
+        android:paddingTop="15dp"
+        />
 </LinearLayout>

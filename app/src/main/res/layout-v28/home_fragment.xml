@@ -3,12 +3,25 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:background="#6FC3A3"
     >
 
+    <TextView
+        android:id="@+id/myTextViewLeaveMeALone"
+        android:outlineSpotShadowColor="@color/brown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textColor="@color/white_smoke"
+        android:text="Leave Me Alone !!"
+        android:visibility="invisible"
+        />
     <ImageView
         android:paddingTop="10dp"
         android:layout_width="250dp"
@@ -20,6 +33,7 @@
         />
 
     <ImageView
+        android:id="@+id/tree_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@mipmap/tree_main"
@@ -64,12 +78,10 @@
         android:id="@+id/myTextViewPercentage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
         android:layout_marginTop="10dp"
         android:layout_below="@id/mySeekBar"
         android:layout_centerHorizontal="true"
         android:text="00 / 00"
         android:textSize="25sp"
         />
-
 </RelativeLayout>

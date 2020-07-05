@@ -30,6 +30,8 @@ public class AppListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        Toast.makeText(getContext(), "Work In Progress. Just Showing the apps", Toast.LENGTH_SHORT).show();
+
         view = inflater.inflate(R.layout.applist_layout, container, false);
         Log.d(TAG, "onCreate: ");
         myPackageManager = Objects.requireNonNull(getContext()).getPackageManager();
@@ -64,6 +66,5 @@ public class AppListFragment extends Fragment {
 
     private boolean isSystemPackage(PackageInfo pkginfo) {
         return (pkginfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
-
     }
 }

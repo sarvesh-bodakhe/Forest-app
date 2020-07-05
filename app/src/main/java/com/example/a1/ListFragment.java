@@ -58,7 +58,7 @@ public class ListFragment extends Fragment {
                 Log.d(TAG, "onDataChange: ");
                 for(DataSnapshot myDataSnapshot : dataSnapshot.getChildren()){
                     ObjectInfo currObject = myDataSnapshot.getValue(ObjectInfo.class);
-//                    Log.d(TAG, "onDataChange: Adding User");
+                    Log.d(TAG, "onDataChange: Adding User");
                     myListOfObjects.add(currObject);
                 }
                 Log.d(TAG, "onDataChange: Size Of myListOfObjects" + myListOfObjects.size());

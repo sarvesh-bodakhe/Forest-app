@@ -1,7 +1,9 @@
 package com.example.a1;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,17 +34,19 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
+import pl.droidsonroids.gif.GifImageView;
+
 public class HomeFragment extends Fragment {
 
     private static final String TAG = "MainActivity";
-    private TextView myTextViewCountDown;
-    private Button myButtonStartCancel;
+    private static TextView myTextViewCountDown, myTextViewPercentage, myTextViewLeaveMeALone;
+    private static Button myButtonStartCancel;
     static int seekBarValue;
-    SeekBar seekBar;
-    private CountDownTimer myCOuntDownTimwe;
+    static SeekBar seekBar;
+    private static CountDownTimer myCOuntDownTimwe;
     static boolean myTimerRunning;
-    private long myStartTimeInMillis = 0;
-    private long myTimeLeftInMillis;
+    private static long myStartTimeInMillis = 0;
+    private static long myTimeLeftInMillis = 0;
     private long myEndTime;
     private boolean isLoggedIn = false;
 
@@ -50,9 +55,9 @@ public class HomeFragment extends Fragment {
     private String infoExpectedEndTIme;
     private String infoActualEndTime;
     private Boolean isTreeTrue = false;
-    ObjectInfo currentObject;
-
-    private String myUserId ;
+    static ObjectInfo currentObject;
+    private GifImageView gifImageView;
+    private static String myUserId ;
     private View view;
     public static ArrayList<ObjectInfo> myListOfObjects;
     DatabaseReference myRef;
@@ -63,8 +68,9 @@ public class HomeFragment extends Fragment {
         myButtonStartCancel = view.findViewById(R.id.myButtonStartCancel);
         myTextViewCountDown = view.findViewById(R.id.myTextViewCountDown);
         myListOfObjects = new ArrayList<ObjectInfo>();
-
-
+        myTextViewPercentage = view.findViewById(R.id.myTextViewPercentage);
+        myTextViewLeaveMeALone = view.findViewById(R.id.myTextViewLeaveMeALone);
+//        gifImageView.canc
         myUserId = FirebaseAuth.getInstance().getUid();
         Log.d(TAG, "onCreate: myUserId = " + myUserId);
         if(myUserId == null)
@@ -103,8 +109,12 @@ public class HomeFragment extends Fragment {
 //                    cancelTimer();
                     Log.d("tag", "Out of Verify()");
                 }else{
-                    startTimer();
-                    myTimerRunning = true;
+                    if(myStartTimeInMillis == 0){
+                        Toast.makeText(getContext(), "Input Can't be zero", Toast.LENGTH_SHORT).show();
+                    }else {
+                        startTimer();
+                        myTimerRunning = true;
+                    }
                 }
             }
         });
@@ -112,8 +122,6 @@ public class HomeFragment extends Fragment {
 
         return view;
     }
-
-
 
 
     private void verifyCancel(){
@@ -140,62 +148,30 @@ public class HomeFragment extends Fragment {
         dialog.show();
     }
 
-
-
-//    @Override
-//    public void onBackPressed() {
-//        if(myTimerRunning) {
-//            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-//            builder.setTitle("Your Tree will die if you quit");
-//            builder.setMessage("Do you really want to quit ?");
-//
-//            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    cancelTimer();
-//                    finish();
-//                }
-//            });
-//
-//            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//
-//                }
-//            });
-//
-//            AlertDialog dialog = builder.create();
-//            dialog.show();
-//        }else{
-//            super.onBackPressed();
-//        }
-//
-//    }
-
-
     public void seekBarFunc(){
         seekBar = view.findViewById(R.id.mySeekBar);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 seekBarValue = progress;
+                updatePercentage(seekBarValue);
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
 //                Log.d("tag", "SeekBar Start");
+
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 Log.d("tag", "SeekBar Stop at "+ seekBarValue);
                 updatePercentage(seekBarValue);
-//                TextView textViewCheck = (TextView)findViewById(R.id.textViewCheck);
-//                textViewCheck.setText(String.valueOf(seekBarValue));
                 setTime(seekBarValue);
             }
         });
     }
+
 
 
     public void setTime(int value){
@@ -216,10 +192,13 @@ public class HomeFragment extends Fragment {
 
 
     private void startTimer(){
+//        gifImageView = view.findViewById(R.id.tree_gif);
         Log.d(TAG, "startTimer: ");
         createObjectInfo();
 
         seekBar.setVisibility(View.INVISIBLE);
+        myTextViewPercentage.setVisibility(View.INVISIBLE);
+        myTextViewLeaveMeALone.setVisibility(View.VISIBLE);
         myTimeLeftInMillis = myStartTimeInMillis;
         myEndTime = System.currentTimeMillis() + myTimeLeftInMillis;
         myCOuntDownTimwe = new CountDownTimer(myTimeLeftInMillis, 1000) {
@@ -255,9 +234,6 @@ public class HomeFragment extends Fragment {
         int currhr = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         int currmin = Calendar.getInstance().get(Calendar.MINUTE);
         String startTime = String.valueOf(currhr) + ":" + String.valueOf(currmin);
-//        Log.d("tag", "startTimer(), myTimeLeftInMillis = "+  myTimeLeftInMillis);
-//        Log.d(TAG, "startTimer: Hour "+ Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
-//        Log.d(TAG, "startTimer: Minute "+ Calendar.getInstance().get(Calendar.MINUTE));
         Log.d(TAG, "createObjectInfo: startTime: " +startTime);
 //        Log.d(TAG, "startTimer: endtime"+ myEndTime);
         int hr = (int) (myStartTimeInMillis/1000/60/60);
@@ -283,7 +259,7 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public void cancelTimer(){
+    static void cancelTimer(){
         Log.d(TAG, "cancelTimer: ");
         String endTimeActual = String.valueOf(Calendar.getInstance().get(Calendar.HOUR_OF_DAY))+ ":"+
                 String.valueOf(Calendar.getInstance().get(Calendar.MINUTE));
@@ -293,6 +269,8 @@ public class HomeFragment extends Fragment {
         currentObject.setDone(false);
         uploadToDatabase();
         seekBar.setVisibility(View.VISIBLE);
+        myTextViewPercentage.setVisibility(View.VISIBLE);
+        myTextViewLeaveMeALone.setVisibility(View.INVISIBLE);
         myTimeLeftInMillis = 0;
         myStartTimeInMillis = 0;
         myTimerRunning = false;
@@ -301,10 +279,12 @@ public class HomeFragment extends Fragment {
         myCOuntDownTimwe.cancel();
         Log.d(TAG, "cancelTimer: Object Description " + currentObject.getFrom()+currentObject.getTo()
                 + currentObject.getEnd() + currentObject.getDone());
+        myTextViewPercentage.setText("00 / 180");
+        seekBar.setProgress(0);
     }
 
 
-    public void uploadToDatabase(){
+    public static void uploadToDatabase(){
         Log.d(TAG, "uploadToDatabase: MyUserId : " + myUserId);
         ObjectInfo objToUpload = currentObject;
 
@@ -336,7 +316,7 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private void updateCounterView(){
+    private static void updateCounterView(){
         int hours = (int) (myTimeLeftInMillis / 1000) / 3600;
         int minutes = (int) ((myTimeLeftInMillis / 1000) % 3600) / 60;
         int seconds = (int) (myTimeLeftInMillis / 1000) % 60;
@@ -353,156 +333,12 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private void updateWatchInterface(){
+    private static void updateWatchInterface(){
         if(myTimerRunning){
             myButtonStartCancel.setText("cancel");
         }else{
-            myButtonStartCancel.setText("start");
+            myButtonStartCancel.setText("Start");
         }
-    }
-
-
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        SharedPreferences sharedPreferences = getSharedPreferences("sharedPreferences", MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putLong("startTimeMillis", myStartTimeInMillis);
-//        editor.putLong("millisLeft", myTimeLeftInMillis);
-//        editor.putBoolean("timerRunning", myTimerRunning);
-//        editor.putLong("endTime", myEndTime);
-//        editor.apply();
-//        if(myCOuntDownTimwe != null){
-//            myCOuntDownTimwe.cancel();
-//        }
-//    }
-//
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        SharedPreferences sharedPreferences = getSharedPreferences("sharedPreferences", MODE_PRIVATE);
-//        myStartTimeInMillis = sharedPreferences.getLong("startTimeMillis", 1800000);
-//        myTimeLeftInMillis = sharedPreferences.getLong("millisLeft", myStartTimeInMillis);
-//        myTimerRunning = sharedPreferences.getBoolean("timerRunning", false);
-//        updateCounterView();
-//        if(myTimerRunning){
-//            myEndTime = sharedPreferences.getLong("endTime", 0);
-//            myTimeLeftInMillis = myEndTime - System.currentTimeMillis();
-//            if(myTimeLeftInMillis < 0){
-//                myTimeLeftInMillis = 0;
-//                myTimerRunning = false;
-//                updateCounterView();
-//                updateWatchInterface();
-//            }else{
-//                startTimer();
-//            }
-//        }
-//    }
-
-
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        Log.d(TAG, "MainActivity onPause: ");
-//    }
-//
-//
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        Log.d(TAG, "MainActivity onStop: ");
-//    }
-//
-//
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        Log.d(TAG, "MainActivity onResume: ");
-//    }
-//
-//
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        Log.d(TAG, "MainActivity onDestroy: ");
-//    }
-
-
-    public void register(View view){
-        Log.d("tag", "register()");
-        Intent intent = new Intent(getContext(), RegisterActivity.class);
-        startActivity(intent);
-//        isLoggedIn = true;
-    }
-
-    public void logIn(View view){
-        Log.d(TAG, "logIn: userId : " + myUserId);
-        if(myUserId == null) {
-            isLoggedIn = true;
-            Log.d("tag", "in logIn(), isLoggedIn useid null" );
-
-            Intent intent = new Intent(getContext(), LoginActivity.class);
-            Log.d(TAG, "logIn: Out of Log in");
-            startActivity(intent);
-            Log.d(TAG, "logIn: ");
-            myUserId = FirebaseAuth.getInstance().getUid();
-            Log.d(TAG, "logIn: User Id after log in = " + myUserId);
-        }else{
-            Toast.makeText(getContext(), "User Already Logged In", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "logIn: User Alreadt Logged in");
-        }
-    }
-
-    public void logOut(View view){
-        if(myUserId != null) {
-            isLoggedIn = false;
-            Log.d(TAG, "logOut: myUserId = " + myUserId);
-            FirebaseAuth.getInstance().signOut();
-            Log.d("tag", "SignedOut");
-            myUserId = null;
-            Log.d(TAG, "logOut: After Sign out myUserId = " + myUserId);
-        }else{
-            Toast.makeText(getContext(), "User Not Logged In", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "logOut: User need to Log in");
-            isLoggedIn = false;
-        }
-    }
-
-    public void fun(View view) {
-        Log.d("tag", "in fun()");
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myref = database.getReference("Root2").push().child("Root3");
-//        myref.setValue("2");
-
-        HashMap<String, Object> myMap = new HashMap<>();
-        myMap.put("Name", "c");
-        myMap.put("StartTime", "12:00");
-        myMap.put("ExpectedEndTime", "14:00");
-        myMap.put("DidComplete", true);
-        myMap.put("EndTime", "14:00");
-
-        myref.updateChildren(myMap);
-    }
-
-    public void goForList(View view) {
-        Log.d("tag", "Go for list");
-        startActivity(new Intent(getContext(), ListActivity.class));
-        Log.d("tag", "Back from list Activity");
-    }
-
-    public void showAppList(View view) {
-        Log.d(TAG, "showAppList: showAppList() Started");
-        startActivity(new Intent(getContext(), AppListActivity.class));
-    }
-
-    public void ShowGraph(View view) {
-
-    }
-
-    public void ShowPieChart(View view) {
-        Log.d(TAG, "ShowPieChart: Goint To PieChartActivity");
-        startActivity(new Intent(getContext(), PieChartActivity.class));
     }
 }
 

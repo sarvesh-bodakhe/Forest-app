@@ -29,7 +29,6 @@ import java.util.List;
 
 public class PieChartFragment extends Fragment {
 
-    private View view;
     PieChart pieChart;
     float trueValues = 0, falseValues = 0;
     DatabaseReference myRef;
@@ -40,7 +39,7 @@ public class PieChartFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: Step 1");
-        view = inflater.inflate(R.layout.activity_pie_chart, container, false);
+        View view = inflater.inflate(R.layout.activity_pie_chart, container, false);
 
 
          pieChart = view.findViewById(R.id.pieChart);
@@ -79,7 +78,9 @@ public class PieChartFragment extends Fragment {
         PieDataSet pieDataSet = new PieDataSet( value, "All Time");
         value.add(new PieEntry( trues, "Successful"));
         value.add(new PieEntry(falses, "Unsuccessful"));
-        pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS);
+        ArrayList<Integer> colors = new ArrayList<>();
+        colors.add(Color.GREEN); colors.add(Color.RED);
+        pieDataSet.setColors(colors);
         pieDataSet.setSliceSpace(2f);
         pieDataSet.setValueTextColor(Color.WHITE);
         PieData pieData = new PieData(pieDataSet);

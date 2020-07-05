@@ -1,5 +1,7 @@
 package com.example.a1;
 
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 //import com.google.firebase.database.core.Context;
@@ -49,20 +52,52 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         String fromTo = currentObject.getFrom() + " - " + currentObject.getTo();
         String endTime = currentObject.getEnd();
         Date date = currentObject.getDate();
-        String dateString = "";
         SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyyy");
 
+        String time = calculateTime(currentObject.getFrom(), currentObject.getEnd());
         String infoAboutTree;
         if(currentObject.getDone()){
-            infoAboutTree = "Successfully planted a tree";
+            infoAboutTree = "Successfully planted";
         }else{
             infoAboutTree = "You've Killed a Tree";
         }
         holder.textViewFromTo.setText(fromTo);
-        holder.textViewIsComplete.setText(currentObject.getDone().toString());
+        holder.textViewIsComplete.setText(time);
         holder.textViewInfo.setText(infoAboutTree);
         holder.textViewForDate.setText(ft.format(date));
+
+        if(currentObject.getDone()) {
+            holder.imageView.setImageResource(R.drawable.smiling_tree_card_view);
+            holder.time.setImageResource(R.drawable.ic_time_green);
+            holder.textViewInfo.setTextColor(ContextCompat.getColor(myContext, R.color.green));
+        }
+        else {
+            holder.imageView.setImageResource(R.drawable.upset_tree_card_view);
+            holder.time.setImageResource(R.drawable.ic_time_red);
+            holder.textViewInfo.setTextColor(ContextCompat.getColor(myContext, R.color.red));
+        }
     }
+
+    private String calculateTime(String from, String end) {
+        String time = "";
+        Log.d(TAG, "calculateTime: from , to = " + from + " "+ end);
+        String[] starts = from.split(":", 2);
+        String[] ends = end.split(":", 2);
+        int starthr, startmin, endhr, endmin;
+
+        starthr = Integer.parseInt(starts[0]);
+        startmin  = Integer.parseInt(starts[1]);
+        endhr  = Integer.parseInt(ends[0]);
+        endmin  = Integer.parseInt(ends[1]);
+        Log.d(TAG, ""+ starthr +" " + startmin);
+        Log.d(TAG, "" + endhr + " " + endmin);
+        int timeTaken = ((endhr*60)+endmin) - ((starthr*60)+startmin);
+        Log.d(TAG, "Timetaken = " + timeTaken);
+        time = String.valueOf(timeTaken);
+        return time;
+
+    }
+
 
     @Override
     public int getItemCount() {
@@ -71,7 +106,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        ImageView imageView;
+        ImageView imageView, time;
         TextView textViewInfo, textViewFromTo, textViewIsComplete, textViewForDate;
         RelativeLayout relativeLayout;
 
@@ -84,6 +119,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
             textViewIsComplete = itemView.findViewById(R.id.myTextViewIsComplete);
             textViewForDate = itemView.findViewById(R.id.myTextViewForDate);
             relativeLayout = itemView.findViewById(R.id.relativeLayoutForList);
+            time = itemView.findViewById(R.id.time_taken);
         }
     }
 }

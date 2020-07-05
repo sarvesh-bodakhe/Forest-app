@@ -1,47 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     tools:context=".RegisterActivity">
+
+    <ImageView
+        android:id="@+id/RegisterPro"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_profile_log_inn"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="35sp"
+        android:layout_centerHorizontal="true"
+        android:text="Register User"
+        android:textStyle="bold"
+        android:textColor="#000"
+        android:id="@+id/textRegister"
+        android:layout_below="@id/RegisterPro"/>
 
     <EditText
         android:id="@+id/myTextViewEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/textRegister"
         android:layout_margin="20dp"
-        android:layout_marginTop="264dp"
-        android:hint="email"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_goneMarginLeft="20dp"
-        app:layout_goneMarginRight="20dp"
-        tools:layout_editor_absoluteX="20dp" />
+        android:ems="10"
+        android:textColor="@color/dark_green"
+        android:paddingHorizontal="15dp"
+        android:inputType="textEmailAddress"
+        android:singleLine="true"
+        android:hint="Email"
+        />
 
     <EditText
         android:id="@+id/myTextViewPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_below="@id/myTextViewEmail"
+        android:layout_margin="20dp"
         android:ems="10"
-        android:hint="password"
+        android:paddingHorizontal="15dp"
+        android:hint="Password"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.101"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/myTextViewEmail"
-        app:layout_constraintVertical_bias="0.0" />
+        android:textColor="@color/dark_green" />
 
     <Button
         android:id="@+id/myButtonRegister"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Register"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.061"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.247" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_below="@id/myTextViewPassword"
+        android:layout_marginHorizontal="20dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="#fff"
+        android:background="@color/our_green"
+        />
+</RelativeLayout>

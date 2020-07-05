@@ -62,13 +62,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(LoginActivity.this,RegisterActivity.class));
             }
         });
-
-
-
-
-
-
-
     }
 
     private void logIn(String txtEmail, String txtPasswor) {
@@ -87,5 +80,10 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "User Need To Register First", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void registerUser(View view) {
+        Log.d(TAG, "registerUser: ");
+        startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
     }
 }

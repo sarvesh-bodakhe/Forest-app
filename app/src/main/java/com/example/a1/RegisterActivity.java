@@ -62,12 +62,12 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()) {
                             Log.d(TAG, "onComplete: Registering User");
-//                            myDataBase.getReference().child("profiles").push().setValue(mAuth.getUid());
+                            Toast.makeText(RegisterActivity.this, "User Registered", Toast.LENGTH_SHORT).show();
                             DatabaseReference myref = FirebaseDatabase.getInstance().getReference().child("profiles");
                             myref.push().setValue(mAuth.getUid());
-                            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                             finish();
                         }else{
+                            Toast.makeText(RegisterActivity.this, "Registration Failed. User Might Be Already Registered", Toast.LENGTH_SHORT).show();
                             Log.d(TAG, "onComplete: Registration Falied");
                         }
                     }
