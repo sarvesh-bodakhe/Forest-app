@@ -222,6 +222,11 @@ public class HomeFragment extends Fragment {
                         + currentObject.getEnd() + currentObject.getDone());
                 uploadToDatabase();
                 updateWatchInterface();
+                seekBar.setVisibility(View.VISIBLE);
+                seekBar.setProgress(0);
+                myTextViewPercentage.setVisibility(View.VISIBLE);
+                myTextViewLeaveMeALone.setVisibility(View.INVISIBLE);
+                myStartTimeInMillis = myTimeLeftInMillis = 0;
             }
         }.start();
         myTimerRunning = true;
