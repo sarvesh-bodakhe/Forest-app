@@ -48,19 +48,12 @@ public class HomeFragment extends Fragment {
     private static long myStartTimeInMillis = 0;
     private static long myTimeLeftInMillis = 0;
     private long myEndTime;
-    private boolean isLoggedIn = false;
-
-    /*Object Variables*/
-    private String infoStartTime;
-    private String infoExpectedEndTIme;
-    private String infoActualEndTime;
-    private Boolean isTreeTrue = false;
     static ObjectInfo currentObject;
-    private GifImageView gifImageView;
     private static String myUserId ;
     private View view;
     public static ArrayList<ObjectInfo> myListOfObjects;
     DatabaseReference myRef;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -206,13 +199,13 @@ public class HomeFragment extends Fragment {
             public void onTick(long millisUntilFinished) {
                 myTimeLeftInMillis = millisUntilFinished;
                 updateCounterView();
-                Log.d("tag", "On tick" + myTimeLeftInMillis);
+//                Log.d("tag", "On tick" + myTimeLeftInMillis);
             }
 
             @Override
             public void onFinish() {
                 myTimerRunning = false;
-//              Tree Completed
+////              Tree Completed
                 Log.d("tag", "Tree Planted");
                 String endTimeActual = String.valueOf(Calendar.getInstance().get(Calendar.HOUR_OF_DAY))+ ":"+
                         String.valueOf(Calendar.getInstance().get(Calendar.MINUTE));

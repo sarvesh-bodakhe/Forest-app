@@ -95,7 +95,6 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         Log.d(TAG, "Timetaken = " + timeTaken);
         time = String.valueOf(timeTaken);
         return time;
-
     }
 
 
@@ -103,6 +102,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     public int getItemCount() {
         return myObjects.size();
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
