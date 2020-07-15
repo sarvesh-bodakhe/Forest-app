@@ -7,11 +7,20 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.DialogTitle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -21,6 +30,7 @@ import android.widget.Toast;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.nio.channels.Channel;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -28,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String myUserId, userMailId;
     DrawerLayout drawer;
     TextView textViewForUserMail;
+    private NotificationManagerCompat notificationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +66,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onUserLeaveHint() {
-        Log.d(TAG, "onUserLeaveHint: Tree will die");
+        Log.d(TAG, "onUserLeaveHint: ");
         if(HomeFragment.myTimerRunning) {
-            HomeFragment.cancelTimer();
+//            createNotification();
+            Log.d(TAG, "Starting Service");
+//            HomeFragment.cancelTimer();
+//            startService(new Intent(this, NotificationService.class));
+//            HomeFragment.cancelTimer();
+            CountDownTimer myTimer = new CountDownTimer(10000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    Log.d(TAG, "onTick: " + millisUntilFinished);
+                    if(5000 < millisUntilFinished & millisUntilFinished < 6000){
+                        Log.d(TAG, "Displaying Notification");
+                        createNotification();
+                    }
+
+                }
+
+                @Override
+                public void onFinish() {
+                    Log.d(TAG, "onFinish: Timer Finished");
+                }
+            }.start();
         }
         super.onUserLeaveHint();
+    }
+
+
+    public void createNotification() {
+        Intent intentMainActivity = new Intent(this, MainActivity.class);
+        intentMainActivity.putExtra("GoBackToMainActivity", 1);
+        PendingIntent pendingIntentMainActivity = PendingIntent.getActivity(this, 0, intentMainActivity, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        notificationManager = NotificationManagerCompat.from(this);
+        Notification notification = new NotificationCompat.Builder(this, SplashActivity.CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.upset_tree_card_view)
+                .setContentTitle("Go Back")
+                .setContentText("your tree will die if you don't go before 10 min")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .setContentIntent(pendingIntentMainActivity)
+                .build();
+        notificationManager.notify(1, notification);
     }
 
     @Override
